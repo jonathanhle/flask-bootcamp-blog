@@ -40,6 +40,8 @@ URLObject = "==2.4.3"
 Werkzeug = "==0.14.1"
 WTForms = "==2.1"
 Flask-WTF = "==0.14.2"
+pylint = "*"
+autopep8 = "*"
 
 [requires]
 python_version = "3.8"
