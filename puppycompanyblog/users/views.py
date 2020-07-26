@@ -71,3 +71,53 @@ def login():
             return redirect(next)
 
     return render_template('login.html', form=form)
+
+# -----------------------------------------------------------
+# ACCOUNT (update UserForm)
+# -----------------------------------------------------------
+
+
+@users.route('/account', methods=['GET', 'POST'])
+@login_required
+def account():
+
+    form = UpdateUserForm()
+    if form.validate_on_submit():
+
+        # if they actually uploaded a picture before
+        if form.picture.data:
+            username = current_user.username
+            pic = add_profile_pic(form.picture.data, username)
+
+            # remember that current_user is the current user's instance of the User class model, which has
+            # an attribute of profile_image
+            current_user.profile_image = pic
+
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        db.session.commit()
+        flash('User Account Updated!')
+        return redirect(url_for('users.account'))
+
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+        form.email.data = current_user.email
+
+    profile_image = url_for(
+        'static', filename='profile_pics/' + current_user.profile_image)
+
+    return render_template('account.html', profile_image=profile_image, form=form)
+
+# -----------------------------------------------------------
+# USER's POST VIEW
+# -----------------------------------------------------------
+
+
+@users.route("/<username>")
+# 112. User Views - Part Two
+def user_posts(username):
+    page = request.args.get('page', 1, type=int)
+    user = User.query.filter_by(username=username).first_or_404()
+    blog_posts = BlogPost.query.filter_by(author=user).order_by(
+        BlogPost.date.desc()).paginate(page=page, per_page=5)
+    return render_template('user_blog_posts.html', blog_posts=blog_posts, user=user)
