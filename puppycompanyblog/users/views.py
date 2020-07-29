@@ -77,7 +77,7 @@ def login():
 # -----------------------------------------------------------
 
 
-@users.route('/account', methods=['GET', 'POST'])
+@users.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
 
