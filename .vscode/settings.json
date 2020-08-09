@@ -1,0 +1,5 @@
+{
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true,
+    "python.pythonPath": "/Users/jonathan/.local/share/virtualenvs/flask-bootcamp-blog-N9YCEHTY/bin/python"
+}
